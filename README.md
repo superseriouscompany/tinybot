@@ -66,5 +66,5 @@ Filtered listeners
       bot.say("let's circle back and put a pin in this. I'm gonna take a quick 5", '#sales');
     })
 
-    bot.drop('foo*'); // deregister functions named foo and fooBar
-    bot.drop('*');    // deregister all listeners
+    bot.drop(/foo.*/); // deregister functions named foo and fooBar
+    bot.drop(/.*/);    // deregister all listeners

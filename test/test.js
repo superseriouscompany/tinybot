@@ -43,7 +43,7 @@ describe('tinybot', function() {
   })
 
   afterEach(function() {
-    bot.drop('*');
+    bot.drop(/.*/);
   })
 
   describe('hearing', function() {
@@ -121,8 +121,6 @@ describe('tinybot', function() {
         })
 
         slackTest.socket.send({text: 'nice'});
-        // TODO: desired api
-        // waitFor(function() { return true}, function done())
         setTimeout(function wait() {
           if( counter < 1 ) { return setTimeout(wait, 10); }
           bot.drop('cool');
@@ -150,7 +148,32 @@ describe('tinybot', function() {
         slackTest.socket.send({text: 'nice'});
         setTimeout(function wait() {
           if( counter < 1 ) { return setTimeout(wait, 10); }
-          bot.drop('cool*');
+          bot.drop(/cool.*/);
+          slackTest.socket.send({text: 'nice'});
+        }, 10);
+      })
+
+      it('drops exact string matches properly', function(cb) {
+        var counter = 0, coolCounter = 0;
+        bot.hears({text: 'nice'}, function cool(message) {
+          coolCounter++;
+        })
+
+        bot.hears({text: 'nice'}, function yepcoolgreat(message) {
+          coolCounter++;
+        })
+
+        bot.hears({text: 'nice'}, function (message) {
+          if( ++counter == 2 ) {
+            expect(coolCounter).toEqual(3);
+            cb();
+          }
+        })
+
+        slackTest.socket.send({text: 'nice'});
+        setTimeout(function wait() {
+          if( counter < 1 ) { return setTimeout(wait, 10); }
+          bot.drop('cool');
           slackTest.socket.send({text: 'nice'});
         }, 10);
       })

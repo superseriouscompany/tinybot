@@ -149,18 +149,20 @@ class Bot extends EventEmitter {
    * bot.hears('foo', function cool() {})
    * bot.hears('bar', function coolNice() {})
    * bot.hears('baz', function() {})
-   * bot.drop('cool*') // drops 'foo' and 'bar' listener
-   * bot.drop('*')     // drops all listeners
+   * bot.drop(/cool/) // drops 'foo' and 'bar' listener
+   * bot.drop(/^/)     // drops all listeners
    *
    * @param  {(RegExp|string)} functionPattern Pattern of listener function names to remove
    */
   drop(functionPattern) {
     var self = this;
 
-    if( !functionPattern ) { return console.warn("Pass * to remove all listeners"); }
+    if( !functionPattern ) { return console.warn("Pass /.*/ to remove all listeners"); }
     if( functionPattern == '*' ) { functionPattern = '.*' }
     self.listeners.filter(function(l) {
-      return l.name.match(functionPattern);
+      return typeof functionPattern === 'string' ?
+        l.name === functionPattern :
+        l.name.match(functionPattern)
     }).forEach(function(l) {
       self.removeListener('message', l.listener);
     })
