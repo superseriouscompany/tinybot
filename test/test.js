@@ -9,8 +9,6 @@ var slackToken = secrets.token;
 if( !slackToken ) { return console.error("Put your slack token into secrets.json in this folder") }
 
 describe('live calls', function() {
-  this.timeout(process.env.TIMEOUT || 5000);
-
   it('connects to slack as expected', function(cb) {
     var bot = new Tinybot(slackToken);
     bot.start(cb);
