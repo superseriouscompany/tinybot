@@ -28,13 +28,15 @@ A slack bot token and node 4.2+.
 Hello World
 
     var Tinybot = require('tinybot');
-    var bot   = new Tinybot('mySecretSlackToken');
+    var bot     = new Tinybot('mySecretSlackToken');
+
     bot.say("Hello world"); // posts to #general by default
 
 Basic listener
 
     var Tinybot = require('tinybot');
-    var bot   = new Tinybot('mySecretSlackToken');
+    var bot     = new Tinybot('mySecretSlackToken');
+
     bot.on('message', function(message) {
       bot.say(`Message received: ${JSON.stringify(message)}`);
     })
@@ -42,7 +44,7 @@ Basic listener
 Filtered listeners
 
     var Tinybot = require('tinybot');
-    var bot   = new Tinybot('mySecretSlackToken');
+    var bot     = new Tinybot('mySecretSlackToken');
 
     // listen for only messages in a channel
     bot.hears({channel: '#general'}, function() {
