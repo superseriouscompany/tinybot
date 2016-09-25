@@ -1,8 +1,8 @@
-var expect  = require('expect');
-var slub    = require('./slub');
-var secrets = require('./secrets');
-var Tinybot = require('../index');
-var debug   = require('debug')('tinybot:test');
+var expect    = require('expect');
+var slackTest = require('slack-rtm-test');
+var secrets   = require('./secrets');
+var Tinybot   = require('../index');
+var debug     = require('debug')('tinybot:test');
 
 var slackToken = secrets.token;
 
@@ -35,7 +35,7 @@ describe('live calls', function() {
 describe('tinybot', function() {
   var bot;
   before(function(cb){
-    slub.serve(6969, function(err) {
+    slackTest.serve(6969, function(err) {
       if( err ) { return cb(err); }
       bot = new Tinybot(slackToken, null, 'http://localhost:6969');
       bot.start(cb);
@@ -52,7 +52,7 @@ describe('tinybot', function() {
         expect(message.type).toEqual('message', `Unexpected message: ${JSON.stringify(message)}`);
         cb();
       });
-      slub.socket.send({ text: 'cool' })
+      slackTest.socket.send({ text: 'cool' })
     })
 
     it('matches a regexp', function(cb) {
@@ -60,14 +60,14 @@ describe('tinybot', function() {
         expect(matches[1]).toEqual('op');
         cb();
       })
-      slub.socket.send({ file: { name: 'foo nope bar'}});
+      slackTest.socket.send({ file: { name: 'foo nope bar'}});
     })
 
     it('translates usernames', function(cb) {
       bot.hears({user: 'neil'}, function(message) {
         cb();
       })
-      slub.socket.send({ user: 'n0'}); // this is defined in slub as the ID for neil
+      slackTest.socket.send({ user: 'n0'}); // this is defined in slackTest as the ID for neil
     })
 
     it('allows hearing once', function(cb) {
@@ -83,9 +83,9 @@ describe('tinybot', function() {
         }
       })
 
-      slub.socket.send({ text: 'red herring'});
-      slub.socket.send({ text: 'great' });
-      slub.socket.send({ text: 'great' });
+      slackTest.socket.send({ text: 'red herring'});
+      slackTest.socket.send({ text: 'great' });
+      slackTest.socket.send({ text: 'great' });
     })
 
     it('matches multiple filters', function(cb) {
@@ -100,9 +100,9 @@ describe('tinybot', function() {
         }
       })
 
-      slub.socket.send({ text: 'nope', channel: 'CG0'})
-      slub.socket.send({ text: 'sick', channel: 'CG0'})
-      slub.socket.send({ text: 'sick', channel: 'NOPE'})
+      slackTest.socket.send({ text: 'nope', channel: 'CG0'})
+      slackTest.socket.send({ text: 'sick', channel: 'CG0'})
+      slackTest.socket.send({ text: 'sick', channel: 'NOPE'})
     })
 
     describe('drop', function() {
@@ -120,13 +120,13 @@ describe('tinybot', function() {
           }
         })
 
-        slub.socket.send({text: 'nice'});
+        slackTest.socket.send({text: 'nice'});
         // TODO: desired api
         // waitFor(function() { return true}, function done())
         setTimeout(function wait() {
           if( counter < 1 ) { return setTimeout(wait, 10); }
           bot.drop('cool');
-          slub.socket.send({text: 'nice'});
+          slackTest.socket.send({text: 'nice'});
         }, 10);
       })
 
@@ -147,11 +147,11 @@ describe('tinybot', function() {
           }
         })
 
-        slub.socket.send({text: 'nice'});
+        slackTest.socket.send({text: 'nice'});
         setTimeout(function wait() {
           if( counter < 1 ) { return setTimeout(wait, 10); }
           bot.drop('cool*');
-          slub.socket.send({text: 'nice'});
+          slackTest.socket.send({text: 'nice'});
         }, 10);
       })
     })

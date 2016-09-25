@@ -24,11 +24,11 @@
   "homepage": "https://github.com/superseriouscompany/tinybot#readme",
   "devDependencies": {
     "expect": "^1.20.2",
-    "mocha": "^3.0.2"
+    "mocha": "^3.0.2",
+    "slack-rtm-test": "^1.0.1"
   },
   "dependencies": {
     "debug": "^2.2.0",
-    "express": "^4.14.0",
     "request": "^2.75.0",
     "ws": "^1.1.1"
   }

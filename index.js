@@ -248,7 +248,3 @@ class Bot extends EventEmitter {
 }
 
 module.exports = Bot;
-
-if( !process.env.NODE_ENV || process.env.NODE_ENV == 'test' ) {
-  module.exports.slub = require('./test/slub');
-}
