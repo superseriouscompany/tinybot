@@ -24,6 +24,7 @@
   "homepage": "https://github.com/superseriouscompany/tinybot#readme",
   "devDependencies": {
     "expect": "^1.20.2",
+    "express": "^4.14.0",
     "mocha": "^3.0.2"
   },
   "dependencies": {

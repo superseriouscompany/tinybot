@@ -113,7 +113,7 @@ class Bot extends EventEmitter {
     var self = this;
     channelId = channelId || defaultChannel;
 
-    if( channelId[0] == '#' ) { channelId = channelIdForName(channelId); }
+    if( channelId[0] == '#' ) { channelId = self.channelIdForName(channelId); }
     // TODO: surface this error
     if( !channelId ) { return console.error("Invalid channelId"); }
 
