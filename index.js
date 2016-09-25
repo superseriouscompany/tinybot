@@ -17,8 +17,8 @@ class Bot extends EventEmitter {
         token: token
       }
     })
-
-    this.listeners = []
+    this.defaultChannel = defaultChannel;
+    this.listeners = [];
   }
 
   /**
@@ -111,9 +111,9 @@ class Bot extends EventEmitter {
    */
   say(text, channelId) {
     var self = this;
-    channelId = channelId || defaultChannel;
+    channelId = channelId || self.defaultChannel;
 
-    if( channelId[0] == '#' ) { channelId = self.channelIdForName(channelId); }
+    if( channelId && channelId[0] == '#' ) { channelId = self.channelIdForName(channelId); }
     // TODO: surface this error
     if( !channelId ) { return console.error("Invalid channelId"); }
 
@@ -248,3 +248,7 @@ class Bot extends EventEmitter {
 }
 
 module.exports = Bot;
+
+if( !process.env.NODE_ENV || process.env.NODE_ENV == 'test' ) {
+  module.exports.slub = require('./test/slub');
+}
