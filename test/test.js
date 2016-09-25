@@ -157,16 +157,3 @@ describe('tinybot', function() {
     })
   })
 })
-
-function expectConversation(conversation, cb) {
-  async.series(conversation.map(function(message) {
-    return function(cb) {
-      if( !!message.response ) {
-        return slub.socket.shouldReceive(message.response, cb);
-      }
-
-      slub.socket.send(message);
-      cb();
-    }
-  }), cb);
-}
