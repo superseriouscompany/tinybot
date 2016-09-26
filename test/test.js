@@ -37,7 +37,7 @@ describe('tinybot', function() {
   before(function(cb){
     slackTest.serve(6969, function(err) {
       if( err ) { return cb(err); }
-      bot = new Tinybot(slackToken, null, 'http://localhost:6969');
+      bot = new Tinybot(slackToken, '#general', 'http://localhost:6969');
       bot.start(cb);
     });
   })
@@ -104,6 +104,25 @@ describe('tinybot', function() {
       slackTest.socket.send({ text: 'sick', channel: 'CG0'})
       slackTest.socket.send({ text: 'sick', channel: 'NOPE'})
     })
+
+    it("expands nested fields", function (cb) {
+      bot.hears({"file.name": 'Slack for iOS'}, function(message) {
+        bot.say("ooooh, fancy");
+      })
+
+      var conversation = [
+        {
+          file: {
+            name: 'Slack for iOS'
+          }
+        },
+        {
+          response: 'ooooh, fancy'
+        }
+      ]
+
+      slackTest.expectConversation(conversation, cb);
+    });
 
     describe('drop', function() {
       it('allows dropping by function name', function(cb) {

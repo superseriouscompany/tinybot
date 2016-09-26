@@ -1,10 +1,9 @@
 'use strict';
-
 var request      = require('request');
 var WebSocket    = require('ws');
 var EventEmitter = require('events');
+var _            = require('lodash');
 var debug        = require('debug')('tinybot');
-
 var id = 0;
 
 class Bot extends EventEmitter {
@@ -237,7 +236,7 @@ class Bot extends EventEmitter {
     for( var i = 0; i < keys.length; i++ ) {
       var field = keys[i];
       var value = matcher[field];
-      var actual = message[field];
+      var actual = _.get(message, field);
       if( field == 'filename' ) { actual = message.file && message.file.name; }
       if( field == 'user' && value[0] != 'U' )    { value = self.userIdForName(value); }
       if( field == 'channel' && value[0] != 'C' ) { value = self.channelIdForName(value); }

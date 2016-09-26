@@ -57,9 +57,9 @@ Filtered listeners
     })
 
     // trolls anyone who posts in #random from an iPhone with nested matchers
-    bot.hears({channel: '#random', file: { name: 'Slack for iOS'}, function fooBar(message) {
+    bot.hears({channel: '#random', "file.name": /Slack for iOS/}, function fooBar(message) {
       bot.say("ooooh, fancy", '#random');
-    }})
+    })
 
     // snooze one meeting with hearsOnce
     bot.hearsOnce({channel: '#sales', text: /meeting/}, function() {
