@@ -30,7 +30,9 @@ Hello World
     var Tinybot = require('tinybot');
     var bot     = new Tinybot('mySecretSlackToken');
 
-    bot.say("Hello world"); // posts to #general by default
+    bot.say("Hello world");               // posts to #general by default
+    bot.say("Hello world", "#random");    // post to a channel by name
+    bot.say("Hello world", "C123456789"); // post to a channel by ID
 
 Basic listener
 
