@@ -35,7 +35,9 @@ describe('live calls', function() {
 describe('tinybot', function() {
   var bot;
   before(function(cb){
-    slackTest.serve(6969, function(err) {
+    slackTest.serve(6969, {
+      channels: [{ name: 'general', id: 'CG0' }]
+    }, function(err) {
       if( err ) { return cb(err); }
       bot = new Tinybot(slackToken, '#general', 'http://localhost:6969');
       bot.start(cb);
@@ -103,6 +105,14 @@ describe('tinybot', function() {
       slackTest.socket.send({ text: 'nope', channel: 'CG0'})
       slackTest.socket.send({ text: 'sick', channel: 'CG0'})
       slackTest.socket.send({ text: 'sick', channel: 'NOPE'})
+    })
+
+    it('allows sending messages to channel based on name', function(cb) {
+      bot.hears({channel: '#general'}, function(message) {
+        return cb();
+      });
+
+      slackTest.socket.send({ channel: '#general'});
     })
 
     it("expands nested fields", function (cb) {
