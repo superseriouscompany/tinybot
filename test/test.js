@@ -6,7 +6,7 @@ var debug     = require('debug')('tinybot:test');
 
 var slackToken = secrets.token;
 
-if( !slackToken ) { return console.error("Put your slack token into secrets.json in this folder") }
+if( !slackToken ) { return console.error("Put your slack token into secrets.json in this folder, under the key 'token'") }
 
 describe('live calls', function() {
   it('connects to slack as expected', function(cb) {
@@ -133,6 +133,25 @@ describe('tinybot', function() {
 
       slackTest.expectConversation(conversation, cb);
     });
+
+    it('matches booleans', function(cb) {
+      bot.hears({"file": true}, function(message) {
+        bot.say('wow, nice file.');
+      })
+
+      var conversation = [
+        {
+          file: {
+            name: 'Anything'
+          }
+        },
+        {
+          response: 'wow, nice file.'
+        }
+      ]
+
+      slackTest.expectConversation(conversation, cb);
+    })
 
     describe('drop', function() {
       it('allows dropping by function name', function(cb) {
