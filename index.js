@@ -80,7 +80,7 @@ class Bot extends EventEmitter {
    * @example
    * bot.hears({ text: 'cool' }, ...)  // exact match on text key of any type 'message' in any channel
    * bot.hears({ text: /foo/ },  ...)  // regex match like above
-   * bot.hears({ filename: 'great.jpg', channel: '#random' }, ...) // filename and channel match
+   * bot.hears({ 'file.name': 'great.jpg', channel: '#random' }, ...) // filename and channel match
    *
    * @param  {Object}   matcher  see examples above
    * @param  {Function} cb       cb(message, matches)
@@ -243,7 +243,7 @@ class Bot extends EventEmitter {
       var field = keys[i];
       var value = matcher[field];
       var actual = _.get(message, field);
-      if( field == 'filename' ) { actual = message.file && message.file.name; }
+      if( field == 'filename' ) { actual = message.file && message.file.name; } // legacy API
       if( field == 'user' && value[0] != 'U' )    { value = self.userIdForName(value); }
       if( field == 'channel' && value[0] != 'C' ) { value = self.channelIdForName(value); }
       if( !actual || !value ) { return false; }
