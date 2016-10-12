@@ -54,7 +54,7 @@ class Bot extends EventEmitter {
       var wsUrl     = body.url;
       self.users    = body.users;
       self.channels = body.channels;
-      self.self     = body.self;
+      self.myId     = body.self.id;
       self.ws       = new WebSocket(wsUrl);
 
       self.ws.on('open', function open() {
@@ -234,6 +234,9 @@ class Bot extends EventEmitter {
   // private functions
   checkMessage(message, matcher) {
     var self = this;
+    if( message.user == self.myId && !matcher.self )  { return false; }
+    delete matcher.self;
+
     var keys = Object.keys(matcher);
     var matches;
     for( var i = 0; i < keys.length; i++ ) {

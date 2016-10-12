@@ -36,7 +36,7 @@ bot.say("Hello world", "#random");    // post to a channel by name
 bot.say("Hello world", "C123456789"); // post to a channel by ID
 ```
 
-Basic listener
+Basic listener: fires for every message over slack websocket
 
 ```js
 var Tinybot = require('tinybot');

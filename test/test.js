@@ -36,7 +36,8 @@ describe('tinybot', function() {
   var bot;
   before(function(cb){
     slackTest.serve(6969, {
-      channels: [{ name: 'general', id: 'CG0' }]
+      channels: [{ name: 'general', id: 'CG0' }],
+      self: { id: 'DISBOT' }
     }, function(err) {
       if( err ) { return cb(err); }
       bot = new Tinybot(slackToken, '#general', 'http://localhost:6969');
@@ -108,6 +109,18 @@ describe('tinybot', function() {
       slackTest.socket.send({ text: 'sick', channel: 'NOPE'}, function(err) {
         expect(err).toBeTruthy();
       })
+    })
+
+    it('ignores messages from self', function(cb) {
+      var spy = expect.createSpy();
+      bot.hears({'text': /.+/}, spy);
+
+      bot.hearsOnce({'text': /.+/, self: true}, function() {
+        expect(spy).toNotHaveBeenCalled();
+        cb();
+      })
+
+      slackTest.socket.send({ text: 'foo', user: 'DISBOT'});
     })
 
     it('allows sending messages to channel based on name', function(cb) {
