@@ -1,6 +1,6 @@
 {
   "name": "tinybot",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A tiny wrapper around the Slack RTM API that provides methods to listen for and send slack messages.",
   "main": "index.js",
   "scripts": {
