@@ -27,46 +27,54 @@ A slack bot token and node 4.2+.
 
 Hello World
 
-    var Tinybot = require('tinybot');
-    var bot     = new Tinybot('mySecretSlackToken');
+```js
+var Tinybot = require('tinybot');
+var bot = new Tinybot('mySecretSlackToken');
 
-    bot.say("Hello world");               // posts to #general by default
-    bot.say("Hello world", "#random");    // post to a channel by name
-    bot.say("Hello world", "C123456789"); // post to a channel by ID
+bot.say("Hello world");               // posts to #general by default
+bot.say("Hello world", "#random");    // post to a channel by name
+bot.say("Hello world", "C123456789"); // post to a channel by ID
+```
 
 Basic listener
 
-    var Tinybot = require('tinybot');
-    var bot     = new Tinybot('mySecretSlackToken');
+```js
+var Tinybot = require('tinybot');
+var bot     = new Tinybot('mySecretSlackToken');
 
-    bot.on('message', function(message) {
-      bot.say(`Message received: ${JSON.stringify(message)}`);
-    })
+bot.on('message', function(message) {
+  // message contains unedited message from slack websocket
+  bot.say(`Message received: ${JSON.stringify(message)}`);
+})
+```
 
 Filtered listeners
 
-    var Tinybot = require('tinybot');
-    var bot     = new Tinybot('mySecretSlackToken');
+```js
 
-    // listen for only messages in a channel
-    bot.hears({channel: '#general'}, function() {
-      bot.say("I heard that!", '#general')
-    })
+var Tinybot = require('tinybot');
+var bot     = new Tinybot('mySecretSlackToken', '#random');
 
-    // rain on everyone's parade with regex matches
-    bot.hears({channel: '#general', text: /I love (.*)/}, function foo(message, matches) {
-      bot.say(`${matches[1]} sucks`);
-    })
+// listen for only messages in a channel
+bot.hears({channel: '#general'}, function() {
+  bot.say("I heard that!", '#general')
+})
 
-    // trolls anyone who posts in #random from an iPhone with nested matchers
-    bot.hears({channel: '#random', "file.name": /Slack for iOS/}, function fooBar(message) {
-      bot.say("ooooh, fancy", '#random');
-    })
+// rain on everyone's parade with regex matches
+bot.hears({channel: '#general', text: /I love (.*)/}, function foo(message, matches) {
+  bot.say(`${matches[1]} sucks`);
+})
 
-    // snooze one meeting with hearsOnce
-    bot.hearsOnce({channel: '#sales', text: /meeting/}, function() {
-      bot.say("let's circle back and put a pin in this. I'm gonna take a quick 5", '#sales');
-    })
+// trolls anyone who posts in #random from an iPhone with nested matchers
+bot.hears({channel: '#random', "file.name": /Slack for iOS/}, function fooBar(message) {
+  bot.say("ooooh, fancy", '#random');
+})
 
-    bot.drop(/foo.*/); // deregister functions named foo and fooBar
-    bot.drop(/.*/);    // deregister all listeners
+// snooze one meeting with hearsOnce
+bot.hearsOnce({channel: '#sales', text: /meeting/}, function() {
+  bot.say("let's circle back and put a pin in this. I'm gonna take a quick 5", '#sales');
+})
+
+bot.drop(/foo.*/); // deregister functions named foo and fooBar
+bot.drop(/.*/);    // deregister all listeners
+```
