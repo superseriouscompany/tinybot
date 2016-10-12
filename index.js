@@ -24,8 +24,9 @@ class Bot extends EventEmitter {
    * start connects to the slack RTM api, populates users and channels, and
    * registers an event emitter for each message
    *
-   * @param  {Function} cb Callback function for error handling
-   * @callback {Error} Error returned in cb
+   * @param  {Function} cb cb(err, body)
+   * @callback {Error} err An error connecting to slack
+   * @callback {Object} body Body returned by slack on connection
    */
   start(cb) {
     var self = this;
@@ -53,11 +54,12 @@ class Bot extends EventEmitter {
       var wsUrl     = body.url;
       self.users    = body.users;
       self.channels = body.channels;
+      self.self     = body.self;
       self.ws       = new WebSocket(wsUrl);
 
       self.ws.on('open', function open() {
         debug("Socket opened", wsUrl);
-        cb();
+        cb(null, body);
       })
       self.ws.on('message', function(data, flags) {
         try {
@@ -83,7 +85,6 @@ class Bot extends EventEmitter {
    * @param  {Object}   matcher  see examples above
    * @param  {Function} cb       cb(message, matches)
    * @return {Object}   message  the slack message object
-   * @return {string}   channel  the channel posted in
    * @return {Array}    matches  capture groups if regexp is specified
    */
   hears(matcher, cb) {
@@ -107,14 +108,16 @@ class Bot extends EventEmitter {
    *
    * @param  {string} text text to send back
    * @param  {string} channelId|channelName channel id or name you want to post in. uses default if omitted.
+   * @param  {Function} cb       cb(err)
+   * @return {Error}    err  an error
    */
-  say(text, channelId) {
+  say(text, channelId, cb) {
+    if( !cb ) { cb = console.error; }
     var self = this;
     channelId = channelId || self.defaultChannel;
 
     if( channelId && channelId[0] == '#' ) { channelId = self.channelIdForName(channelId); }
-    // TODO: surface this error
-    if( !channelId ) { return console.error("Invalid channelId"); }
+    if( !channelId ) { return cb(new Error("Invalid channelId")); }
 
     var message = {
       channel: channelId,

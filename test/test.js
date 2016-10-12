@@ -95,16 +95,19 @@ describe('tinybot', function() {
       var spy = expect.createSpy();
 
       bot.hears({text: 'sick', channel: '#general'}, spy);
-      bot.hears({text: 'sick'}, function() {
+      bot.hears({channel: '#general'}, function() {
         if( ++counter == 2 ) {
           expect(spy.calls.length).toEqual(1);
           cb();
         }
+        debug(counter);
       })
 
       slackTest.socket.send({ text: 'nope', channel: 'CG0'})
       slackTest.socket.send({ text: 'sick', channel: 'CG0'})
-      slackTest.socket.send({ text: 'sick', channel: 'NOPE'})
+      slackTest.socket.send({ text: 'sick', channel: 'NOPE'}, function(err) {
+        expect(err).toBeTruthy();
+      })
     })
 
     it('allows sending messages to channel based on name', function(cb) {
