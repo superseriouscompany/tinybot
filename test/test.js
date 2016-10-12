@@ -59,7 +59,7 @@ describe('tinybot', function() {
     })
 
     it('matches a regexp', function(cb) {
-      bot.hears({filename: /n(.*)e/}, function(message, matches) {
+      bot.hears({'file.name': /n(.*)e/}, function(message, matches) {
         expect(matches[1]).toEqual('op');
         cb();
       })
