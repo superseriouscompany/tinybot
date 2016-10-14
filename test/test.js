@@ -120,7 +120,7 @@ describe('tinybot', function() {
         cb();
       })
 
-      slackTest.socket.send({ text: 'foo', user: 'DISBOT'});
+      bot.say('foo');
     })
 
     it('allows sending messages to channel based on name', function(cb) {

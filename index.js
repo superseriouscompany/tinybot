@@ -234,7 +234,7 @@ class Bot extends EventEmitter {
   // private functions
   checkMessage(message, matcher) {
     var self = this;
-    if( message.user == self.myId && !matcher.self )  { return false; }
+    if( message.reply_to !== undefined && !matcher.self )  { return false; }
     delete matcher.self;
 
     var keys = Object.keys(matcher);
